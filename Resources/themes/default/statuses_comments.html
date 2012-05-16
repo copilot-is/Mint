@@ -1,0 +1,26 @@
+<div class="comments">
+    {% for comment in comments %}
+    <div class="comment">
+        <a href="weibo://user?fetch_with=user_id&value={{comment.user.id}}">
+            <img style="height:50px;width:50px;float:left;" src="{{comment.user.profile_image_url}}" />
+        </a>
+        <div class="comment-content">
+            <div class="profile"><a href="weibo://user?fetch_with=user_id&value={{comment.user.id}}">{{ comment.user.screen_name }}</a> {% if comment.user.verified %}<span class="verified-icon"></span> {% /if %} <span class="colorless">{{ comment.created_at|weibo_date_format }}来自{{ comment.source|weibo_link_target_blank }}</span>
+            </div>
+            <p>{{ comment.text|weibo_content_format }}</p>
+            <div class="actions" style="text-align:right;">
+                <a href="weibo://reply?id={{ comment.status.id }}&cid={{ comment.id }}&user={{comment.user.screen_name}}&content={{comment.text|weibo_content_truncate}}&avatar={{comment.user.profile_image_url}}&type=reply" class="reply-action" title="回复"><span><i></i><b>回复</b></span></a>
+            </div>
+        </div>
+    </div>
+    {% /for %}
+    
+    {% if comments.@count %}
+    <div class="pages">
+        {% if prev_page > -1 %}
+        <div class="prev" onclick="javascript:window.open('weibo://get_comments?id={{status_id}}&page={{prev_page}}','_blank')">上一页</div>
+        {% /if %}
+        <div class="next" onclick="javascript:window.open('weibo://get_comments?id={{status_id}}&page={{next_page}}','_blank')">下一页</div>
+    </div>
+    {% /if %}
+</div>

@@ -1,0 +1,76 @@
+{% for status in statuses %}
+
+<div class="status-item">
+    
+    <div class="status-item-avatar">
+        <a href="weibo://user?fetch_with=user_id&value={{status.user.id}}">
+            <img style="height:50px;width:50px;" src="{{status.user.profile_image_url}}" />
+        </a>
+    </div>
+    
+    <div class="status-item-content">
+        
+        {% if status.favorited %}
+        <div class="status-dogear status-dogear-fav"></div>
+        {% else %}
+        <div class="status-dogear"></div>
+        {% /if %}
+        
+        <div class="more" onclick='window.open("weibo://status_comments?sid={{status.id}}");'></div>
+        
+        <div class="profile"><a href="weibo://user?fetch_with=user_id&value={{status.user.id}}">{{ status.user.screen_name }}</a> {% if status.user.verified %}<span class="verified-icon"></span> {% /if %}<span class="colorless">{{ status.created_at|weibo_date_format }}来自{{ status.source|weibo_link_target_blank }}</span></div>
+        
+        <p class="text">{{ status.text|weibo_content_format }}</p>
+        
+        {% if status.thumbnail_pic %}
+        <div class="thumbnail">
+            <a href="weibo://image?url={{status.original_pic}}"><img src="{{status.thumbnail_pic}}" /></a>
+        </div>
+        {% /if %}
+        
+        {% if status.retweeted_status %}
+        <div class="retweeted-arrow"></div>
+        <div class="retweeted">
+            {% if status.retweeted_status.deleted %}
+            <p class="text">{{ status.retweeted_status.text|weibo_content_format }}</p>
+            {% else %}
+            <p class="text">
+            <a href="weibo://user?fetch_with=user_id&value={{status.retweeted_status.user.id}}">{{ status.retweeted_status.user.screen_name }}</a> {% if status.retweeted_status.user.verified %}<span class="verified-icon"></span> {% /if %}
+            {{ status.retweeted_status.text|weibo_content_format }}
+            </p>
+            
+            {% if status.retweeted_status.thumbnail_pic %}
+            <div class="thumbnail">
+                <a href="weibo://image?url={{status.retweeted_status.original_pic}}"><img src="{{status.retweeted_status.thumbnail_pic}}" /></a>
+            </div>
+            {% /if %}
+            
+            <div class="actions">
+                <span class="colorless">{{ status.retweeted_status.created_at|weibo_date_format }}来自{{ status.retweeted_status.source|weibo_link_target_blank }}</span>
+                
+                <a href="weibo://repost?id={{status.retweeted_status.id}}&rt_content={{status.retweeted_status.text|weibo_content_truncate}}&rt_user={{status.retweeted_status.user.screen_name}}&content={{status.text}}&user={{status.user.screen_name}}&avatar={{status.retweeted_status.user.profile_image_url}}" class="retweet-action"><span><i></i><b>转发</b></span></a>
+                
+                <a href="weibo://reply?id={{status.retweeted_status.id}}&user={{status.retweeted_status.user.screen_name}}&avatar={{status.retweeted_status.user.profile_image_url}}&content={{status.retweeted_status.text|weibo_content_truncate}}&type=comment" class="reply-action"><span><i></i><b>评论</b></span></a>
+            </div>
+            {% /if %}
+            
+        </div>
+        {% /if %}
+        
+        <div class="actions">
+
+            <a href="weibo://repost?id={{status.id}}&content={{status.text|weibo_content_truncate}}&user={{status.user.screen_name}}&avatar={{status.user.profile_image_url}}" class="retweet-action"><span><i></i><b>转发</b></span></a>
+            
+            {% if status.favorited %}
+            <a href="weibo://destroy_favorites?id={{status.id}}" class="unfavorite-action"><span><i></i><b>取消收藏</b></span></a>
+            {% else %}
+            <a href="weibo://create_favorites?id={{status.id}}" class="favorite-action"><span><i></i><b>收藏</b></span></a>
+            {% /if %}
+            
+            <a href="weibo://reply?id={{status.id}}&user={{status.user.screen_name}}&avatar={{status.user.profile_image_url}}&content={{status.text|weibo_content_truncate}}&type=comment" class="reply-action"><span><i></i><b>评论</b></span></a> {{ status | weibo_delete_status }}
+        </div>
+        
+    </div>
+    
+</div>
+{% /for %}

@@ -1,0 +1,24 @@
+{% for user in users %}
+<div class="user-list">
+    <a href="weibo://user?fetch_with=user_id&value={{user.id}}">
+        <img style="height:50px;width:50px;float:left;" src="{{user.profile_image_url}}" />
+    </a>
+    <div class="user-list-content">
+        <div class="profile"><a href="weibo://user?fetch_with=user_id&value={{user.id}}">{{ user.screen_name }}</a> {% if user.verified %}<span class="verified-icon"></span> {% /if %} <span class="colorless">来自{{ user.location }}</span>
+        </div>
+        {% if user.status %}
+        <p>{{ user.status.text|weibo_content_format }}</p>
+        <div class="actions" style="text-align:right;">{{ user.status.created_at|weibo_date_format }}</div>
+        {% /if %}
+    </div>
+</div>
+{% /for %}
+
+{% if users.@count %}
+<div class="pages">
+    {% if prev_page > -1 %}
+    <div class="prev" onclick="javascript:window.open('weibo://{{host}}?screen_name={{screen_name}}&cursor={{prev_cursor}}','_blank')">上一页</div>
+    {% /if %}
+    <div class="next" onclick="javascript:window.open('weibo://{{host}}?screen_name={{screen_name}}&cursor={{next_cursor}}','_blank')">下一页</div>
+</div>
+{% /if %}

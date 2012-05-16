@@ -1,0 +1,42 @@
+{% for status in statuses %}
+
+<div class="status-item">
+    
+    <div class="status-item-avatar">
+        <a href="weibo://user?fetch_with=user_id&value={{status.user.id}}">
+            <img style="height:50px;width:50px;" src="{{status.user.profile_image_url}}" />
+        </a>
+    </div>
+    
+    <div class="status-item-content">
+        
+        <div class="more" onclick='window.open("weibo://status_comments?sid={{status.status.id}}");'></div>
+        
+        <div class="profile"><a href="weibo://user?fetch_with=user_id&value={{status.user.id}}">{{ status.user.screen_name }}</a> {% if status.user.verified %}<span class="verified-icon"></span> {% /if %}<span class="colorless">{{ status.created_at|weibo_date_format }}来自{{ status.source|weibo_link_target_blank }}</span></div>
+        
+        <p class="text">{{ status.text|weibo_content_format }}</p>
+        
+        {% if status.thumbnail_pic %}
+        <div class="thumbnail">
+            <a href="weibo://image?url={{status.original_pic}}"><img src="{{status.thumbnail_pic}}" /></a>
+        </div>
+        {% /if %}
+        
+        {% if status.status %}
+        <div class="retweeted-arrow"></div>
+        <div class="retweeted">
+            <p class="text">
+                <a href="weibo://user?fetch_with=user_id&value={{status.status.user.id}}">{{ status.status.user.screen_name }}</a>{% if status.status.user.verified %} <span class="verified-icon"></span> {% /if %}
+                {{ status.status.text|weibo_content_format }}
+            </p>
+        </div>
+        {% /if %}
+            
+        <div class="actions">
+
+            <a href="weibo://reply?id={{status.id}}&user={{status.user.screen_name}}&avatar={{status.user.profile_image_url}}&content={{status.text|weibo_content_truncate}}&type=comment" class="reply-action"><span><i></i><b>回复</b></span></a> {{ status | weibo_delete_status }}
+        </div>
+    </div>
+    
+</div>
+{% /for %}

@@ -1,0 +1,42 @@
+<div class="profile-panel">
+    <div class="profile-text">
+        <img src="{{user.profile_image_url|weibo_big_image}}" width="80"/>
+        <div class="full-name">
+            <h2>
+                {{user.screen_name}}
+                {% if user.verified %}
+                <span class="verified-icon"></span>
+                {% /if %}
+            </h2> 
+        </div>
+        <div class="location">
+            {% if user.gender equalsString "m" %}
+            男,
+            {% else if user.gender equalsString "f" %}
+            女, 
+            {% /if %}
+            {{user.location}}
+        </div>
+    </div>
+    
+    <div class="user-info">
+        {% if user.description %}
+        <span>{{user.description}}</span>
+        {% else %}
+        <span>还没填写个人介绍</span>
+        {% /if %}
+        
+        {% if user.url notequalsstring "http://" %}
+        <a href="{{user.url}}" target="_blank">{{user.url}}</a>
+        {% /if %}
+    </div>
+    
+    <ul class="user-stats">
+        <li><a class="user-stats-count" href="weibo://timeline?screen_name={{user.screen_name}}&page=1">{{user.statuses_count}}<span class="user-stats-stat">微博</span></a></li>
+        <li><a class="user-stats-count" href="weibo://friends?screen_name={{user.screen_name}}&cursor=-1">{{user.friends_count}}<span class="user-stats-stat">关注</span></a></li>
+        <li><a class="user-stats-count" href="weibo://followers?screen_name={{user.screen_name}}&cursor=-1">{{user.followers_count}}<span class="user-stats-stat">粉丝</span></a></li>
+    </ul>
+</div>
+
+<div class="user-header"></div>
+<div id="user_content"></div>

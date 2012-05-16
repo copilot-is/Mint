@@ -1,0 +1,7 @@
+//
+// Prefix header for all source files of the 'Mint' target in the 'Mint' project
+//
+
+#ifdef __OBJC__
+    #import <Cocoa/Cocoa.h>
+#endif
